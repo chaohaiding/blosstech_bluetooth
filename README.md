@@ -35,7 +35,7 @@ Install the required tools and configurations using Microsoft's [windows-build-t
 `git clone https://github.com/chaohaiding/blosstech_bluetooth.git`
 - `cd blosstech_bluetooth`
 - run `npm install` to install all the dependencies
-- turn on your bluetooh devices and the bluetech adaptar in your local machine.
+- turn on your bluetooh devices and the bluetooth adaptar in your local machine.
 - run `node scan.js` to get the test log `bluetooth_scan.log`.
 - run `node getdata.js` to get the test log `bluetooth_getdata.log`.
 
