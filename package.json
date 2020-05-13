@@ -1,0 +1,30 @@
+{
+  "name": "blosstech_bluetooth",
+  "version": "0.0.1",
+  "description": "a proxy project for connect nearby BLE devices and pass to the server",
+  "main": "scan.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "repository": "",
+  "author": "Chaohai Ding",
+  "license": "BSD",
+  "engines": {
+    "node": "v8.17.0"
+  },
+  "dependencies": {
+    "@abandonware/noble": "^1.9.2-8",
+    "@s524797336/noble-mac": "^0.1.2",
+    "array-buffer-to-hex": "^1.0.0",
+    "async": "^3.2.0",
+    "bluetooth-serial-port": "^2.2.7",
+    "eddystone-beacon": "^1.0.7",
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "inquirer": "^7.1.0",
+    "log4js": "^6.2.1",
+    "noble": "^1.9.1",
+    "serialport": "^9.0.0",
+    "socket.io": "^2.3.0"
+  }
+}
