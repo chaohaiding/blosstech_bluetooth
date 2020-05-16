@@ -39,5 +39,7 @@ Install the required tools and configurations using Microsoft's [windows-build-t
 - run `node scan.js` to get the test log `bluetooth_scan.log`.
 - run `node getdata.js` to get the test log `bluetooth_getdata.log`.
 
-
+## Run the test for temperature devices
+- run `node gettemp.js` to get the test log `bluetooth_gettemp.log`.
+- run `node gettemp_sub.js` to get the test log `bluetooth_gettemp_sub.log`.
 
