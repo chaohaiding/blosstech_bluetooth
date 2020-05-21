@@ -46,7 +46,7 @@ noble.on('discover', peripheral => {
 
   if(peripheral.uuid==HEART_RATE_DEVICE_INFORMATION_UUID){
     logger.info('-------------通过UUID找到目标蓝牙设备，并尝试连接目标设备-------------');
-    logger.info(peripheral);
+    //logger.info(peripheral);
     heartRatePeripheral(peripheral);
   }
   if(peripheral.advertisement.serviceUuids&&peripheral.advertisement.serviceUuids[0]===HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID){
@@ -64,6 +64,7 @@ async function heartRatePeripheral(peripheral){
   HEART_RATE_DEVICE_INFORMATION_HANDLE_CMD_WRITE=0x20;
   HEART_RATE_DEVICE_INFORMATION_HANDLE_DATA_NOTIFY=0x23;
   HEART_RATE_DEVICE_INFORMATION_HANDLE_DATA_WRITE=0X24;
+
   peripheral.on('connect', () => {
     logger.info('-------------已经成功连接-------------');
     logger.info(`连接设备, 名称: ${peripheral.advertisement.localName}, uuid: ${peripheral.uuid}, MAC地址: ${peripheral.address}, 信号强度: ${peripheral.rssi}, state:${peripheral.state}`)
@@ -90,6 +91,8 @@ async function heartRatePeripheral(peripheral){
       logger.error(error);
     }
 
+
+    logger.info('-------------尝试获取设备服务-------------');
     //发现设备的服务
     peripheral.discoverServices([null, (error, services) => {
       if(error){
