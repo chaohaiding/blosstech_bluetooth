@@ -94,7 +94,7 @@ async function heartRatePeripheral(peripheral){
 
     logger.info('-------------尝试获取设备服务-------------');
     //发现设备的服务
-    peripheral.discoverServices([null, (error, services) => {
+    peripheral.discoverServices(null, (error, services) => {
       if(error){
         logger.error('-------------获取设备服务失败-------------');
         logger.error(error);
