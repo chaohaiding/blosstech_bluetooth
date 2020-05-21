@@ -15,6 +15,10 @@ const RSSI_THRESHOLD=-90;
 
 
 const HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID='FFF0';//
+
+const HEART_RATE_DEVICE_INFORMATION_UUID='e07dead8e8a9';
+
+
 /*
 监听蓝牙状态
 */
@@ -39,9 +43,15 @@ noble.on('discover', peripheral => {
   //实际测试蓝牙硬件的服务UUID:HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID
   //CMD_UUID: 0xFFF1  HANDLE:0x20 (write)
   //DATA_UUID: 0xFFF2 HANDLE:0x23 (notify) 0x24 (write)
+
+  if(peripheral.uuid==HEART_RATE_DEVICE_INFORMATION_UUID){
+    logger.info('-------------通过UUID找到目标蓝牙设备，并尝试连接目标设备-------------');
+    logger.info(peripheral);
+    heartRatePeripheral(peripheral);
+  }
   if(peripheral.advertisement.serviceUuids&&peripheral.advertisement.serviceUuids[0]===HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID){
     noble.stopScanning();
-    logger.info('-------------找到目标蓝牙设备，并尝试连接目标设备-------------');
+    logger.info('-------------通过Service_UUID找到目标蓝牙设备，并尝试连接目标设备-------------');
     heartRatePeripheral(peripheral);
   }else{
     //logger.warn('找不到相对应的设备，请将bluetooth_scan_result.log 文件一并发给联系开发者');
