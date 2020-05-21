@@ -13,9 +13,8 @@ logger.level = 'debug';
 //设置RSSI的范围值 -26 (a few inches) to -100 (40-50 m distance).
 const RSSI_THRESHOLD=-90;
 
-//FFF0
-const HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID='f000ffc004514000b000000000000000';//f000ffc004514000b000000000000000
 
+const HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID='fff0';//f000ffc004514000b000000000000000
 const HEART_RATE_DEVICE_INFORMATION_UUID='e07dead8e8a9';
 
 
@@ -94,7 +93,8 @@ async function heartRatePeripheral(peripheral){
 
     logger.info('-------------尝试获取设备服务-------------');
     //发现设备的服务
-    peripheral.discoverServices(null, (error, services) => {
+    //
+    peripheral.discoverServices([HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID], (error, services) => {
       if(error){
         logger.error('-------------获取设备服务失败-------------');
         logger.error(error);
@@ -103,6 +103,28 @@ async function heartRatePeripheral(peripheral){
       logger.info(services);
       logger.info(`----成功获取服务----, name: ${services[0].name}, uuid: ${services[0].uuid}, type: ${services[0].type}`);
       //获取 service 实体
+      /* uuid: '1800',
+        name: 'Generic Access',
+        type: 'org.bluetooth.service.generic_access'
+
+        uuid: '1801',
+        name: 'Generic Attribute',
+        type: 'org.bluetooth.service.generic_attribute',
+
+        uuid: '180a',
+        name: 'Device Information',
+        type: 'org.bluetooth.service.device_information',
+
+        uuid: 'fff0',
+        name: null,
+        type: null,
+        includedServiceUuids: null,
+
+        uuid: 'f000ffc004514000b000000000000000',
+        name: null,
+        type: null,
+        */
+
       const heartRateService = services[0];
 
 
@@ -114,7 +136,30 @@ async function heartRatePeripheral(peripheral){
             logger.error('-------------获取特征失败-------------');
             logger.error(error);
           }
+
+
           logger.info(characteristics);
+
+
+          /*
+          _serviceUuid: '1800',
+          uuid: '2a00',
+          name: 'Device Name',
+          type: 'org.bluetooth.characteristic.gap.device_name',
+          properties: [ 'read' ],
+
+          _serviceUuid: '1800',
+          uuid: '2a01',
+          name: 'Appearance',
+          type: 'org.bluetooth.characteristic.gap.appearance'
+
+          _serviceUuid: '1800',
+          uuid: '2a04',
+          name: 'Peripheral Preferred Connection Parameters',
+          type: 'org.bluetooth.characteristic.gap.peripheral_preferred_connection_parameters',
+
+          */
+
 
           let heartRateCMDCharacteristic = characteristics[0];
           let heartRateDATACharacteristic= characteristics[1];
