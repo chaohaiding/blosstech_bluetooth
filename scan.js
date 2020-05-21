@@ -13,8 +13,8 @@ logger.level = 'debug';
 //设置RSSI的范围值 -26 (a few inches) to -100 (40-50 m distance).
 const RSSI_THRESHOLD=-90;
 
-
-const HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID='FFF0';//
+//FFF0
+const HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID='f000ffc004514000b000000000000000';//f000ffc004514000b000000000000000
 
 const HEART_RATE_DEVICE_INFORMATION_UUID='e07dead8e8a9';
 
@@ -52,7 +52,7 @@ noble.on('discover', peripheral => {
   if(peripheral.advertisement.serviceUuids&&peripheral.advertisement.serviceUuids[0]===HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID){
     noble.stopScanning();
     logger.info('-------------通过Service_UUID找到目标蓝牙设备，并尝试连接目标设备-------------');
-    heartRatePeripheral(peripheral);
+    //heartRatePeripheral(peripheral);
   }else{
     //logger.warn('找不到相对应的设备，请将bluetooth_scan_result.log 文件一并发给联系开发者');
   }
@@ -107,12 +107,14 @@ async function heartRatePeripheral(peripheral){
 
 
       //获取 characteristics 特征
-      heartRateService.discoverCharacteristics([HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID, HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID], function(error, characteristics) {
+      //[HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID, HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID]
+      heartRateService.discoverCharacteristics(null, function(error, characteristics) {
 
           if(error){
             logger.error('-------------获取特征失败-------------');
             logger.error(error);
           }
+          logger.info(characteristics);
 
           let heartRateCMDCharacteristic = characteristics[0];
           let heartRateDATACharacteristic= characteristics[1];
