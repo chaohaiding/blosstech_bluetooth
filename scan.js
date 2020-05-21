@@ -44,6 +44,7 @@ noble.on('discover', peripheral => {
   //DATA_UUID: 0xFFF2 HANDLE:0x23 (notify) 0x24 (write)
 
   if(peripheral.uuid==HEART_RATE_DEVICE_INFORMATION_UUID){
+    noble.stopScanning();
     logger.info('-------------通过UUID找到目标蓝牙设备，并尝试连接目标设备-------------');
     //logger.info(peripheral);
     heartRatePeripheral(peripheral);
@@ -58,8 +59,10 @@ noble.on('discover', peripheral => {
 });
 
 async function heartRatePeripheral(peripheral){
-  HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID='FFF1';
-  HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID='FFF2';
+  HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID='fff1';
+  HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID='fff2';
+
+
   HEART_RATE_DEVICE_INFORMATION_HANDLE_CMD_WRITE=0x20;
   HEART_RATE_DEVICE_INFORMATION_HANDLE_DATA_NOTIFY=0x23;
   HEART_RATE_DEVICE_INFORMATION_HANDLE_DATA_WRITE=0X24;
@@ -103,70 +106,24 @@ async function heartRatePeripheral(peripheral){
       logger.info(services);
       logger.info(`----成功获取服务----, name: ${services[0].name}, uuid: ${services[0].uuid}, type: ${services[0].type}`);
       //获取 service 实体
-      /* uuid: '1800',
-        name: 'Generic Access',
-        type: 'org.bluetooth.service.generic_access'
-
-        uuid: '1801',
-        name: 'Generic Attribute',
-        type: 'org.bluetooth.service.generic_attribute',
-
-        uuid: '180a',
-        name: 'Device Information',
-        type: 'org.bluetooth.service.device_information',
-
-        uuid: 'fff0',
-        name: null,
-        type: null,
-        includedServiceUuids: null,
-
-        uuid: 'f000ffc004514000b000000000000000',
-        name: null,
-        type: null,
-        */
-
       const heartRateService = services[0];
-
-
       //获取 characteristics 特征
       //[HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID, HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID]
-      heartRateService.discoverCharacteristics(null, function(error, characteristics) {
+      heartRateService.discoverCharacteristics([HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID,HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID], function(error, characteristics) {
 
           if(error){
             logger.error('-------------获取特征失败-------------');
             logger.error(error);
           }
-
-
           logger.info(characteristics);
-
-
-          /*
-          _serviceUuid: '1800',
-          uuid: '2a00',
-          name: 'Device Name',
-          type: 'org.bluetooth.characteristic.gap.device_name',
-          properties: [ 'read' ],
-
-          _serviceUuid: '1800',
-          uuid: '2a01',
-          name: 'Appearance',
-          type: 'org.bluetooth.characteristic.gap.appearance'
-
-          _serviceUuid: '1800',
-          uuid: '2a04',
-          name: 'Peripheral Preferred Connection Parameters',
-          type: 'org.bluetooth.characteristic.gap.peripheral_preferred_connection_parameters',
-
-          */
-
-
           let heartRateCMDCharacteristic = characteristics[0];
           let heartRateDATACharacteristic= characteristics[1];
           logger.info('---------获取 heart rate cmd characteristic 特征------------');
           logger.debug(heartRateCMDCharacteristic);
           logger.info('---------获取 heart rate data characteristic 特征------------');
           logger.debug(heartRateDATACharacteristic);
+
+
 
           if(heartRateCMDCharacteristic&&heartRateDATACharacteristic){
             // true if for write without response
@@ -177,14 +134,12 @@ async function heartRatePeripheral(peripheral){
               }
               logger.info('------------订阅DATA特征通知成功-----------');
             });*/
-
             heartRateDATACharacteristic.notify(true, (error)=> {
                if (error) {
                    logger.error("notify error: " + error)
                }
                logger.info('data channel notification is on!');
              });
-
             //DATA通道通知使能，写入0x0001打开通知
             heartRateDATACharacteristic.write(new Buffer([0x0001]), true, (error)=>{
               if(error){
