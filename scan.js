@@ -67,7 +67,7 @@ async function heartRatePeripheral(peripheral){
   peripheral.on('connect', () => {
     logger.info('-------------已经成功连接-------------');
     logger.info(`连接设备, 名称: ${peripheral.advertisement.localName}, uuid: ${peripheral.uuid}, MAC地址: ${peripheral.address}, 信号强度: ${peripheral.rssi}, state:${peripheral.state}`)
-
+    logger.info(peripheral);
   });
 
   peripheral.on('disconnect', (error) => {
@@ -91,12 +91,13 @@ async function heartRatePeripheral(peripheral){
     }
 
     //发现设备的服务
-    peripheral.discoverServices([HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID], (error, services) => {
+    peripheral.discoverServices([null, (error, services) => {
       if(error){
         logger.error('-------------获取设备服务失败-------------');
         logger.error(error);
       }
-      //console.log(services);
+
+      logger.info(services);
       logger.info(`----成功获取服务----, name: ${services[0].name}, uuid: ${services[0].uuid}, type: ${services[0].type}`);
       //获取 service 实体
       const heartRateService = services[0];
