@@ -20,7 +20,7 @@ const HEART_RATE_DEVICE_INFORMATION_UUID='e07dead8e8a9';
 
 /*
 监听蓝牙状态
-*/
+*/s
 noble.on('stateChange', state => {
   //logger.info(`蓝牙设备状态发生改变: ${state}`);
   if (state === 'poweredOn') {
@@ -169,7 +169,6 @@ async function heartRatePeripheral(peripheral){
               if(error){
                  logger.error("发送指令查询设备MAC地址错误: " + error);
               }
-
               logger.info('通过 characteristic 查询设备MAC地址');//Not work on andriod simulator
             });
 
