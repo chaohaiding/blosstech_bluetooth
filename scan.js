@@ -103,11 +103,10 @@ async function heartRatePeripheral(peripheral){
       logger.error(error);
     }
 
-
     logger.info('-------------尝试获取设备服务-------------');
     //发现设备的服务
-    //
-    peripheral.discoverServices([HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID], (error, services) => {
+    //[HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID]
+    peripheral.discoverServices(null, (error, services) => {
       if(error){
         logger.error('-------------获取设备服务失败-------------');
         logger.error(error);
@@ -119,12 +118,13 @@ async function heartRatePeripheral(peripheral){
       const heartRateService = services[0];
       //获取 characteristics 特征
       //[HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID, HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID]
-      heartRateService.discoverCharacteristics([HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID,HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID], function(error, characteristics) {
+      heartRateService.discoverCharacteristics(null, function(error, characteristics) {
 
           if(error){
             logger.error('-------------获取特征失败-------------');
             logger.error(error);
           }
+          
           logger.info(characteristics);
           let heartRateCMDCharacteristic = characteristics[0];
           let heartRateDATACharacteristic= characteristics[1];
