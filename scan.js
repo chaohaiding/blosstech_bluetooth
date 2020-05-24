@@ -39,6 +39,8 @@ noble.on('warning', message => {
 //发现附近蓝牙设备
 noble.on('discover', peripheral => {
   logger.info(`发现附近蓝牙设备, 名称: ${peripheral.advertisement.localName}, uuid: ${peripheral.uuid}, MAC地址: ${peripheral.address}, 信号强度: ${peripheral.rssi}, state:${peripheral.state}`)
+  logger.info(`设备的advertisement:`${peripheral.advertisement});
+
   //实际测试蓝牙硬件的服务UUID:HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID
   //CMD_UUID: 0xFFF1  HANDLE:0x20 (write)
   //DATA_UUID: 0xFFF2 HANDLE:0x23 (notify) 0x24 (write)
@@ -49,6 +51,7 @@ noble.on('discover', peripheral => {
     //logger.info(peripheral);
     heartRatePeripheral(peripheral);
   }
+
   if(peripheral.advertisement.serviceUuids&&peripheral.advertisement.serviceUuids[0]===HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID){
     noble.stopScanning();
     logger.info('-------------通过Service_UUID找到目标蓝牙设备，并尝试连接目标设备-------------');
