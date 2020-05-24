@@ -13,7 +13,6 @@ logger.level = 'debug';
 //设置RSSI的范围值 -26 (a few inches) to -100 (40-50 m distance).
 const RSSI_THRESHOLD=-90;
 
-
 const HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID='fff0';//f000ffc004514000b000000000000000
 const HEART_RATE_DEVICE_INFORMATION_UUID='4b63bcaec73944c983ac6cb947a497c0';//'e07dead8e8a9';
 const HEART_RATE_DEVICE_INFORMATION_NAME='BW-ECG-02';
@@ -39,8 +38,6 @@ noble.on('warning', message => {
 //发现附近蓝牙设备
 noble.on('discover', peripheral => {
   logger.info(`发现附近蓝牙设备, 名称: ${peripheral.advertisement.localName}, uuid: ${peripheral.uuid}, MAC地址: ${peripheral.address}, 信号强度: ${peripheral.rssi}, state:${peripheral.state}`)
-
-
   //logger.info(peripheral.advertisement);
 
   //实际测试蓝牙硬件的服务UUID:HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID
@@ -52,8 +49,7 @@ noble.on('discover', peripheral => {
     logger.info('-------------通过UUID找到目标蓝牙设备，并尝试连接目标设备-------------');
     //logger.info(peripheral);
     heartRatePeripheral(peripheral);
-  }else if(peripheral.advertisement&&peripheral.advertisement.localName==HEART_RATE_DEVICE_INFORMATION_NAME){
-
+  } else if(peripheral.advertisement&&peripheral.advertisement.localName==HEART_RATE_DEVICE_INFORMATION_NAME){
     noble.stopScanning();
     logger.info('-------------通过Local Name找到目标蓝牙设备，并尝试连接目标设备-------------');
     //logger.info(peripheral);
@@ -69,13 +65,16 @@ noble.on('discover', peripheral => {
   }
 });
 
-async function heartRatePeripheral(peripheral){
+function heartRatePeripheral(peripheral){
   HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID='fff1';
   HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID='fff2';
 
   HEART_RATE_DEVICE_INFORMATION_HANDLE_CMD_WRITE=0x20;
   HEART_RATE_DEVICE_INFORMATION_HANDLE_DATA_NOTIFY=0x23;
   HEART_RATE_DEVICE_INFORMATION_HANDLE_DATA_WRITE=0X24;
+
+  logger.info(peripheral);
+
 
   peripheral.on('connect', () => {
     logger.info('-------------已经成功连接-------------');
@@ -93,7 +92,11 @@ async function heartRatePeripheral(peripheral){
       logger.info('-------------开始重新搜索-------------');
       noble.startScanning();
     }
+  });
 
+  peripheral.on('warning', (message)=>{
+    logger.error('-------------连接出错-------------');
+    logger.error(message);
   });
 
   //连接蓝牙设备
@@ -119,12 +122,11 @@ async function heartRatePeripheral(peripheral){
       //获取 characteristics 特征
       //[HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID, HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID]
       heartRateService.discoverCharacteristics(null, function(error, characteristics) {
-
           if(error){
             logger.error('-------------获取特征失败-------------');
             logger.error(error);
           }
-          
+
           logger.info(characteristics);
           let heartRateCMDCharacteristic = characteristics[0];
           let heartRateDATACharacteristic= characteristics[1];
