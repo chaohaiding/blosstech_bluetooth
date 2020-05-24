@@ -39,7 +39,7 @@ noble.on('warning', message => {
 //发现附近蓝牙设备
 noble.on('discover', peripheral => {
   logger.info(`发现附近蓝牙设备, 名称: ${peripheral.advertisement.localName}, uuid: ${peripheral.uuid}, MAC地址: ${peripheral.address}, 信号强度: ${peripheral.rssi}, state:${peripheral.state}`)
-  logger.info(`设备的advertisement:`${peripheral.advertisement});
+  logger.info(`设备的advertisement:${peripheral.advertisement}`);
 
   //实际测试蓝牙硬件的服务UUID:HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID
   //CMD_UUID: 0xFFF1  HANDLE:0x20 (write)
