@@ -15,8 +15,8 @@ const RSSI_THRESHOLD=-90;
 
 
 const HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID='fff0';//f000ffc004514000b000000000000000
-const HEART_RATE_DEVICE_INFORMATION_UUID='e07dead8e8a9';
-
+const HEART_RATE_DEVICE_INFORMATION_UUID='4b63bcaec73944c983ac6cb947a497c0';//'e07dead8e8a9';
+const HEART_RATE_DEVICE_INFORMATION_NAME='BW-ECG-02';
 
 /*
 监听蓝牙状态
@@ -41,7 +41,7 @@ noble.on('discover', peripheral => {
   logger.info(`发现附近蓝牙设备, 名称: ${peripheral.advertisement.localName}, uuid: ${peripheral.uuid}, MAC地址: ${peripheral.address}, 信号强度: ${peripheral.rssi}, state:${peripheral.state}`)
 
 
-  logger.info(peripheral.advertisement);
+  //logger.info(peripheral.advertisement);
 
   //实际测试蓝牙硬件的服务UUID:HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID
   //CMD_UUID: 0xFFF1  HANDLE:0x20 (write)
@@ -50,6 +50,12 @@ noble.on('discover', peripheral => {
   if(peripheral.uuid==HEART_RATE_DEVICE_INFORMATION_UUID){
     noble.stopScanning();
     logger.info('-------------通过UUID找到目标蓝牙设备，并尝试连接目标设备-------------');
+    //logger.info(peripheral);
+    heartRatePeripheral(peripheral);
+  }else if(peripheral.advertisement&&peripheral.advertisement.localName==HEART_RATE_DEVICE_INFORMATION_NAME){
+
+    noble.stopScanning();
+    logger.info('-------------通过Local Name找到目标蓝牙设备，并尝试连接目标设备-------------');
     //logger.info(peripheral);
     heartRatePeripheral(peripheral);
   }
@@ -66,7 +72,6 @@ noble.on('discover', peripheral => {
 async function heartRatePeripheral(peripheral){
   HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_CMD_UUID='fff1';
   HEART_RATE_DEVICE_INFORMATION_CHARACTERISTIC_DATA_UUID='fff2';
-
 
   HEART_RATE_DEVICE_INFORMATION_HANDLE_CMD_WRITE=0x20;
   HEART_RATE_DEVICE_INFORMATION_HANDLE_DATA_NOTIFY=0x23;
