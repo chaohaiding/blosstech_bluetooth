@@ -1,6 +1,6 @@
 //const noble = require('noble');
-const noble=require('@abandonware/noble');
-//const noble = require('@s524797336/noble-mac');//仅在Mac Mojave版本上有问题，需要安装该branch https://github.com/Timeular/noble-mac/issues/7
+//const noble=require('@abandonware/noble');
+const noble = require('@s524797336/noble-mac');//仅在Mac Mojave版本上有问题，需要安装该branch https://github.com/Timeular/noble-mac/issues/7
 const inquirer = require('inquirer');
 const log4js = require('log4js');
 log4js.configure({
@@ -38,7 +38,7 @@ noble.on('discover', peripheral => {
   //实际测试蓝牙硬件的服务UUID:HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID
   //CMD_UUID: 0xFFF1  HANDLE:0x20 (write)
   //DATA_UUID: 0xFFF2 HANDLE:0x23 (notify) 0x24 (write)
-  
+
   if(peripheral.advertisement.serviceUuids&&peripheral.advertisement.serviceUuids[0]===TEMP_DEVICE_INFORMATION_SERVICE_UUID){
     noble.stopScanning();
     logger.info('-------------找到目标蓝牙设备，并尝试连接目标设备-------------');

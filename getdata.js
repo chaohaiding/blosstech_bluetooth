@@ -1,6 +1,6 @@
 //const noble = require('noble')
-const noble=require('@abandonware/noble');
-//const noble = require('@s524797336/noble-mac');//仅在Mac Mojave版本上有问题，需要安装该branch https://github.com/Timeular/noble-mac/issues/7
+//const noble=require('@abandonware/noble');
+const noble = require('@s524797336/noble-mac');//仅在Mac Mojave版本上有问题，需要安装该branch https://github.com/Timeular/noble-mac/issues/7
 const inquirer = require('inquirer');
 const log4js = require('log4js');
 log4js.configure({
