@@ -20,7 +20,7 @@ const HEART_RATE_DEVICE_INFORMATION_UUID='e07dead8e8a9';
 
 /*
 监听蓝牙状态
-*/s
+*/
 noble.on('stateChange', state => {
   //logger.info(`蓝牙设备状态发生改变: ${state}`);
   if (state === 'poweredOn') {
