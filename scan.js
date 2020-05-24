@@ -1,6 +1,6 @@
 //const noble = require('noble');
-//const noble=require('@abandonware/noble');
-const noble = require('@s524797336/noble-mac');//仅在Mac Mojave版本上有问题，需要安装该branch https://github.com/Timeular/noble-mac/issues/7
+const noble=require('@abandonware/noble');
+//const noble = require('@s524797336/noble-mac');//仅在Mac Mojave版本上有问题，需要安装该branch https://github.com/Timeular/noble-mac/issues/7
 const inquirer = require('inquirer');
 const log4js = require('log4js');
 log4js.configure({
@@ -49,7 +49,7 @@ noble.on('discover', peripheral => {
     logger.info('-------------通过UUID找到目标蓝牙设备，并尝试连接目标设备-------------');
     //logger.info(peripheral);
     heartRatePeripheral(peripheral);
-  } else if(peripheral.advertisement&&peripheral.advertisement.localName==HEART_RATE_DEVICE_INFORMATION_NAME){
+  } else if(peripheral.advertisement.localName==HEART_RATE_DEVICE_INFORMATION_NAME){
     noble.stopScanning();
     logger.info('-------------通过Local Name找到目标蓝牙设备，并尝试连接目标设备-------------');
     //logger.info(peripheral);
@@ -57,7 +57,7 @@ noble.on('discover', peripheral => {
   }
 
   if(peripheral.advertisement.serviceUuids&&peripheral.advertisement.serviceUuids[0]===HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID){
-    noble.stopScanning();
+    //noble.stopScanning();
     logger.info('-------------通过Service_UUID找到目标蓝牙设备，并尝试连接目标设备-------------');
     //heartRatePeripheral(peripheral);
   }else{
@@ -72,9 +72,6 @@ function heartRatePeripheral(peripheral){
   HEART_RATE_DEVICE_INFORMATION_HANDLE_CMD_WRITE=0x20;
   HEART_RATE_DEVICE_INFORMATION_HANDLE_DATA_NOTIFY=0x23;
   HEART_RATE_DEVICE_INFORMATION_HANDLE_DATA_WRITE=0X24;
-
-  logger.info(peripheral);
-
 
   peripheral.on('connect', () => {
     logger.info('-------------已经成功连接-------------');
@@ -106,7 +103,7 @@ function heartRatePeripheral(peripheral){
       logger.error(error);
     }
 
-    logger.info('-------------尝试获取设备服务-------------');
+    logger.info('-----------------尝试获取设备服务-------------------');
     //发现设备的服务
     //[HEART_RATE_DEVICE_INFORMATION_SERVICE_UUID]
     peripheral.discoverServices(null, (error, services) => {
